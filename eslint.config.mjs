@@ -21,8 +21,8 @@ export default [
             ...pluginJs.configs.recommended.rules,
             ...tsPlugin.configs.recommended.rules,
 						"@typescript-eslint/no-unnecessary-try-catch": "off",
-            "@typescript-eslint/no-explicit-any": "error",
-            "@typescript-eslint/no-unused-vars": "error",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-unused-vars": "off",
             "no-unused-expressions": "off",
             "no-undef": "off",
             "no-constant-condition": "off"

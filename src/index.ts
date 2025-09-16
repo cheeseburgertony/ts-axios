@@ -1,5 +1,7 @@
-import { AxiosRequestConfig } from './types'
+import { AxiosRequestConfig } from "./types";
 
-function axios(config: AxiosRequestConfig) {}
+function axios(config: AxiosRequestConfig) {
 
-export default axios
+}
+
+export default axios;

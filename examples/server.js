@@ -1,0 +1,66 @@
+const express = require("express");
+const webpack = require("webpack");
+const webpackDevMiddleware = require("webpack-dev-middleware");
+const webpackHotMiddleware = require("webpack-hot-middleware");
+const WebpackConfig = require("./webpack.config");
+
+const app = express();
+const compiler = webpack(WebpackConfig);
+const router = express.Router();
+
+/**
+ * 使用 webpack-dev-middleware
+ * - 将 webpack 构建的结果保存在内存中，而不是输出到磁盘
+ * - 拦截对构建文件的请求，并返回内存中的最新结果
+ */
+app.use(
+	webpackDevMiddleware(compiler, {
+		publicPath: "/__build__/", // 构建文件的公共访问路径（需与 webpack.config.js 中保持一致）
+		stats: {
+			colors: true, // 输出带颜色的日志
+			chunks: false // 不显示每个 chunk 的详细信息
+		}
+	})
+);
+
+/**
+ * 使用 webpack-hot-middleware
+ * - 监听代码变化，触发热更新（HMR）
+ * - 无需刷新浏览器即可加载最新的模块
+ */
+app.use(webpackHotMiddleware(compiler));
+
+/**
+ * 提供静态资源服务
+ * - 直接访问当前目录下的静态文件（如 HTML）
+ */
+app.use(express.static(__dirname));
+
+/**
+ * 解析请求体
+ * - express.json() 解析 JSON 格式请求体
+ * - express.urlencoded() 解析 URL-encoded 格式请求体
+ *   （application/x-www-form-urlencoded）
+ * - 相当于原来的 body-parser.json() 和 body-parser.urlencoded()
+ */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/**
+ * 定义路由
+ * - 示例接口：GET /simple/get
+ */
+router.get("/simple/get", (req, res) => {
+	res.json({ msg: `hello world` });
+});
+app.use(router);
+
+/**
+ * 启动服务器
+ * - 默认端口 8080
+ * - 支持自定义 PORT 环境变量
+ */
+const port = process.env.PORT || 8081;
+module.exports = app.listen(port, () => {
+	console.log(`Server listening on http://localhost:${port}, Ctrl+C to stop`);
+});

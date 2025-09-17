@@ -1,29 +1,23 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "strict": true,
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declarationDir": "dist/types",
-    "outDir": "dist/lib",
-    "typeRoots": ["node_modules/@types"],
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "include": [
-    "src/**/*",
-    "test/**/*"  // 添加这行包含测试文件
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"target": "ESNext",
+		"module": "ESNext",
+		"lib": ["ESNext", "DOM"],
+		"strict": true,
+		"noImplicitAny": true,
+		"sourceMap": true,
+		"declaration": true,
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"declarationDir": "dist/types",
+		"outDir": "dist/lib",
+		"typeRoots": ["node_modules/@types"],
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true
+	},
+	"include": ["examples/**/*", "src/**/*", "test/**/*"],
+	"exclude": ["node_modules", "dist"]
 }

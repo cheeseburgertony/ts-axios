@@ -11,7 +11,7 @@ const encode = (val: string): string => {
 		.replace(/%5D/gi, "]");
 };
 
-export const buildURL = (url: string, params: any): string => {
+export const buildURL = (url: string, params?: any): string => {
 	if (!params) {
 		return url;
 	}

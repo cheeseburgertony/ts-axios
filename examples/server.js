@@ -53,6 +53,11 @@ app.use(express.urlencoded({ extended: true }));
 router.get("/simple/get", (req, res) => {
 	res.json({ msg: `hello world` });
 });
+
+router.get("/base/get", (req, res) => {
+	res.json(req.query);
+});
+
 app.use(router);
 
 /**

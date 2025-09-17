@@ -15,11 +15,12 @@ const normalizeHeaderName = (headers: any, normalizedName: string): void => {
 	});
 };
 
-export const processHeaders = (headers: any, data: any): void => {
+export const processHeaders = (headers: any, data: any): any => {
 	normalizeHeaderName(headers, "Content-Type");
 	if (isPlainObject(data)) {
 		if (headers && !headers["Content-Type"]) {
 			headers["Content-Type"] = "application/json;charset=utf-8";
 		}
 	}
+  return headers;
 };

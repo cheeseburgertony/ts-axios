@@ -22,5 +22,22 @@ export const processHeaders = (headers: any, data: any): any => {
 			headers["Content-Type"] = "application/json;charset=utf-8";
 		}
 	}
-  return headers;
+	return headers;
+};
+
+export const parseHeaders = (headers: string): any => {
+	let parsed = Object.create(null);
+
+	headers.split("\r\n").forEach((line) => {
+		let [key, value] = line.split(":");
+		key = key?.trim().toLocaleLowerCase();
+		if (!key) {
+			return;
+		}
+		if (value) {
+			value = value.trim();
+		}
+		parsed[key] = value;
+	});
+	return parsed;
 };

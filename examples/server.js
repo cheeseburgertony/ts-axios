@@ -146,6 +146,12 @@ const registerInterceptorRouter = () => {
 	});
 };
 
+const registerConfigRouter = () => {
+	router.post("/config/post", function (req, res) {
+		res.json(req.body);
+	});
+};
+
 /**
  * 注册路由
  */
@@ -154,6 +160,7 @@ registerBaseRouter();
 registerErrorRouter();
 registerExtendRouter();
 registerInterceptorRouter();
+registerConfigRouter();
 
 app.use(router);
 

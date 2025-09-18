@@ -44,9 +44,9 @@ export const deepMerge = (...objs: any[]): any => {
 				const val = obj[key];
 				if (isPlainObject(val)) {
 					if (isPlainObject(result[key])) {
-						deepMerge(result[key], val);
+						result[key] = deepMerge(result[key], val);
 					} else {
-						deepMerge({}, val);
+						result[key] = deepMerge({}, val);
 					}
 				} else {
 					result[key] = val;

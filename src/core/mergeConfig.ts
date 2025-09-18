@@ -11,6 +11,8 @@ export default function mergeConfig(
 		config2 = {};
 	}
 
+	console.log("config1", config1);
+	console.log("config2", config2);
 	const defaultStrat = (val1: any, val2: any): any => {
 		return typeof val2 !== "undefined" ? val2 : val1;
 	};
@@ -60,6 +62,8 @@ export default function mergeConfig(
 		const strat = strats[key] || defaultStrat;
 		config[key] = strat(config1[key], config2![key]);
 	}
+
+  console.log('config', config)
 
 	return config;
 }

@@ -11,3 +11,26 @@ export const isDate = (val: any): val is Date => {
 export const isPlainObject = (val: any): val is object => {
 	return toString.call(val) === "[object Object]";
 };
+
+export function extend<T, U>(to: T, from: U): T & U {
+	for (const key in from) {
+		(to as T & U)[key] = from[key] as any;
+	}
+
+	// 复制原型上的方法
+	if (from && typeof from === "object") {
+		const proto = Object.getPrototypeOf(from);
+		if (proto) {
+			Object.getOwnPropertyNames(proto).forEach((key) => {
+				if (
+					key !== "constructor" &&
+					typeof (proto as any)[key] === "function"
+				) {
+					(to as any)[key] = (proto as any)[key].bind(from);
+				}
+			});
+		}
+	}
+
+	return to as T & U;
+}

@@ -1,6 +1,6 @@
-import { createError } from "./helper/error";
-import { parseHeaders } from "./helper/headers";
-import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from "./types";
+import { createError } from "../helper/error";
+import { parseHeaders } from "../helper/headers";
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from "../types";
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 	return new Promise((resolve, reject) => {

@@ -28,7 +28,7 @@ export default function mergeConfig(
 			return val2;
 		} else if (isPlainObject(val1)) {
 			return deepMerge(val1);
-		} else if (typeof val1 !== "undefined") {
+		} else {
 			return val1;
 		}
 	};

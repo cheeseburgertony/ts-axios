@@ -55,7 +55,8 @@ export default [
 			"no-unused-expressions": "off",
 			"no-undef": "off",
 			"no-constant-condition": "off",
-			"@typescript-eslint/no-unused-vars": "off"
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/prefer-ts-expect-error": "off"
 		}
 	}
 ];

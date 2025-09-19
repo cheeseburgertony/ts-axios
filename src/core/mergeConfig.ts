@@ -34,7 +34,7 @@ export default function mergeConfig(
 	};
 
 	const stratKeysFromVal2 = ["url", "params", "data"];
-	const stratKeyDeepMerge = ["headers"];
+	const stratKeyDeepMerge = ["headers", "auth"];
 
 	stratKeysFromVal2.forEach((key) => {
 		strats[key] = fromVal2Strat;

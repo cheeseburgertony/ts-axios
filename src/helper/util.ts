@@ -38,8 +38,8 @@ export function extend<T, U>(to: T, from: U): T & U {
 export const deepMerge = (...objs: any[]): any => {
 	const result = Object.create(null);
 
-	if (objs) {
-		objs.forEach((obj) => {
+	objs.forEach((obj) => {
+		if (obj) {
 			Object.keys(obj).forEach((key) => {
 				const val = obj[key];
 				if (isPlainObject(val)) {
@@ -52,8 +52,8 @@ export const deepMerge = (...objs: any[]): any => {
 					result[key] = val;
 				}
 			});
-		});
-	}
+		}
+	});
 
 	return result;
 };

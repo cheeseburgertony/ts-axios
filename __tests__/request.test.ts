@@ -269,4 +269,36 @@ describe("请求测试", () => {
 			expect(request.requestHeaders["Content-Type"]).toBe("application/json");
 		});
 	});
+
+	test("应该支持 ArrayBuffer 响应", (done) => {
+		let response: AxiosResponse;
+
+		function str2ab(str: string) {
+			const buff = new ArrayBuffer(str.length * 2);
+			const view = new Uint16Array(buff);
+			for (let i = 0; i < str.length; i++) {
+				view[i] = str.charCodeAt(i);
+			}
+			return buff;
+		}
+
+		axios("/foo", {
+			responseType: "arraybuffer"
+		}).then((data) => {
+			response = data;
+		});
+
+		getAjaxRequest().then((request) => {
+			request.respondWith({
+				status: 200,
+				// @ts-expect-error - jasmine-ajax response 类型定义不完整
+				response: str2ab("Hello world")
+			});
+
+			setTimeout(() => {
+				expect(response.data.byteLength).toBe(22);
+				done();
+			}, 100);
+		});
+	});
 });

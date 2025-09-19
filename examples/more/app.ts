@@ -132,40 +132,50 @@ import qs from "qs";
 // 		console.log(e.message);
 // 	});
 
-axios
-	.get("/more/get", {
-		params: new URLSearchParams("a=b&c=d")
-	})
-	.then((res) => {
-		console.log(res);
-	});
+// axios
+// 	.get("/more/get", {
+// 		params: new URLSearchParams("a=b&c=d")
+// 	})
+// 	.then((res) => {
+// 		console.log(res);
+// 	});
 
-axios
-	.get("/more/get", {
-		params: {
-			a: 1,
-			b: 2,
-			c: ["a", "b", "c"]
-		}
-	})
-	.then((res) => {
-		console.log(res);
-	});
+// axios
+// 	.get("/more/get", {
+// 		params: {
+// 			a: 1,
+// 			b: 2,
+// 			c: ["a", "b", "c"]
+// 		}
+// 	})
+// 	.then((res) => {
+// 		console.log(res);
+// 	});
+
+// const instance = axios.create({
+// 	paramsSerializer(params) {
+// 		return qs.stringify(params, { arrayFormat: "brackets" });
+// 	}
+// });
+
+// instance
+// 	.get("/more/get", {
+// 		params: {
+// 			a: 1,
+// 			b: 2,
+// 			c: ["a", "b", "c"]
+// 		}
+// 	})
+// 	.then((res) => {
+// 		console.log(res);
+// 	});
 
 const instance = axios.create({
-	paramsSerializer(params) {
-		return qs.stringify(params, { arrayFormat: "brackets" });
-	}
+	baseURL: "https://miaobi-lite.bj.bcebos.com/"
 });
 
-instance
-	.get("/more/get", {
-		params: {
-			a: 1,
-			b: 2,
-			c: ["a", "b", "c"]
-		}
-	})
-	.then((res) => {
-		console.log(res);
-	});
+instance.get("/miaobi/5mao/b%27LV8xNzMzNDUyNjUyLjcyOTc3Ng%3D%3D%27/0.png");
+
+instance.get(
+	"https://img1.baidu.com/it/u=2849291256,1557928414&fm=253&fmt=auto&app=138&f=JPEG?w=328&h=500"
+);

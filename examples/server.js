@@ -3,6 +3,8 @@ const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
 const cookieParser = require("cookie-parser");
+const multipart = require("connect-multiparty");
+const path = require("path");
 const WebpackConfig = require("./webpack.config");
 
 require("./server2");
@@ -179,6 +181,17 @@ const registerCancelRouter = () => {
 const registerMoreRouter = () => {
 	router.get("/more/get", (req, res) => {
 		res.json(req.cookies);
+	});
+
+	app.use(
+		multipart({
+			uploadDir: path.resolve(__dirname, "upload-file")
+		})
+	);
+
+	router.post("/more/upload", function (req, res) {
+		console.log(req.body, req.files);
+		res.end("upload success!");
 	});
 };
 

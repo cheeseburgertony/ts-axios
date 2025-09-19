@@ -30,8 +30,12 @@ export const parseHeaders = (headers: string): any => {
 	let parsed = Object.create(null);
 
 	headers.split("\r\n").forEach((line) => {
-		let [key, value] = line.split(":");
-		key = key?.trim().toLocaleLowerCase();
+		const colonIndex = line.indexOf(":");
+		if (colonIndex === -1) {
+			return;
+		}
+		let key = line.substring(0, colonIndex).trim().toLocaleLowerCase();
+		let value = line.substring(colonIndex + 1);
 		if (!key) {
 			return;
 		}

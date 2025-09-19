@@ -24,7 +24,7 @@
     "prepare": "husky",
     "lint-staged": "lint-staged",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.js && typedoc --out docs",
+    "build": "tsc --module commonjs && rollup -c rollup.config.js --bundleConfigAsCjs && typedoc --out docs",
     "start": "rollup -c rollup.config.js -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",

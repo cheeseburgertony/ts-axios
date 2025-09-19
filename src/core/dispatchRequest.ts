@@ -35,6 +35,6 @@ const transformResponseData = (res: AxiosResponse): AxiosResponse => {
 
 const throwIfCancellationRequested = (config: AxiosRequestConfig): void => {
 	if (config.cancelToken) {
-		config.cancelToken.thorwIfRequested();
+		config.cancelToken.throwIfRequested();
 	}
 };

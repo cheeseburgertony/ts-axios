@@ -24,7 +24,7 @@ export default class CancelToken {
 		});
 	}
 
-	thorwIfRequested(): void {
+	throwIfRequested(): void {
 		if (this.reason) {
 			throw this.reason;
 		}

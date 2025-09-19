@@ -121,7 +121,7 @@ export interface AxiosStatic extends AxiosInstance {
 export interface CancelToken {
 	promise: Promise<Cancel>;
 	reason?: Cancel;
-	thorwIfRequested(): void;
+	throwIfRequested(): void;
 }
 
 export interface Canceler {

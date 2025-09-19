@@ -28,7 +28,7 @@ export function extend<T, U>(to: T, from: U): T & U {
 	// 复制原型上的方法
 	if (from && typeof from === "object") {
 		const proto = Object.getPrototypeOf(from);
-		if (proto) {
+		if (proto && proto !== Object.prototype) {
 			Object.getOwnPropertyNames(proto).forEach((key) => {
 				if (
 					key !== "constructor" &&

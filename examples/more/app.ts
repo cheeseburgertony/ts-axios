@@ -170,12 +170,43 @@ import qs from "qs";
 // 		console.log(res);
 // 	});
 
-const instance = axios.create({
-	baseURL: "https://miaobi-lite.bj.bcebos.com/"
+// const instance = axios.create({
+// 	baseURL: "https://miaobi-lite.bj.bcebos.com/"
+// });
+
+// instance.get("/miaobi/5mao/b%27LV8xNzMzNDUyNjUyLjcyOTc3Ng%3D%3D%27/0.png");
+
+// instance.get(
+// 	"https://img1.baidu.com/it/u=2849291256,1557928414&fm=253&fmt=auto&app=138&f=JPEG?w=328&h=500"
+// );
+
+function getA() {
+	return axios.get("/more/A");
+}
+
+function getB() {
+	return axios.get("/more/B");
+}
+
+axios.all([getA(), getB()]).then(
+	axios.spread(function (resA, resB) {
+		console.log(resA.data);
+		console.log(resB.data);
+	})
+);
+
+axios.all([getA(), getB()]).then(([resA, resB]) => {
+	console.log(resA.data);
+	console.log(resB.data);
 });
 
-instance.get("/miaobi/5mao/b%27LV8xNzMzNDUyNjUyLjcyOTc3Ng%3D%3D%27/0.png");
-
-instance.get(
-	"https://img1.baidu.com/it/u=2849291256,1557928414&fm=253&fmt=auto&app=138&f=JPEG?w=328&h=500"
-);
+const fakeConfig = {
+	baseURL: "https://www.baidu.com/",
+	url: "/user/12345",
+	params: {
+		idClient: 1,
+		idTest: 2,
+		testString: "thisIsATest"
+	}
+};
+console.log(axios.getUri(fakeConfig));

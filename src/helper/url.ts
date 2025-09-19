@@ -1,4 +1,4 @@
-import { isDate, isPlainObject } from "./util";
+import { isDate, isPlainObject, isURLSearchParams } from "./util";
 
 interface URLOrigin {
 	protocol: string;
@@ -16,36 +16,48 @@ const encode = (val: string): string => {
 		.replace(/%5D/gi, "]");
 };
 
-export const buildURL = (url: string, params?: any): string => {
+export const buildURL = (
+	url: string,
+	params?: any,
+	paramsSerializer?: (params: any) => string
+): string => {
 	if (!params) {
 		return url;
 	}
 
-	const parts: string[] = [];
-	Object.keys(params).forEach((key) => {
-		const val = params[key];
-		if (val === null || typeof val === "undefined") {
-			return;
-		}
-		let values = [];
-		if (Array.isArray(val)) {
-			values = val;
-			key += "[]";
-		} else {
-			values = [val];
-		}
+	let serializedParams;
 
-		values.forEach((value) => {
-			if (isDate(value)) {
-				value = value.toISOString();
-			} else if (isPlainObject(value)) {
-				value = JSON.stringify(value);
+	if (paramsSerializer) {
+		serializedParams = paramsSerializer(params);
+	} else if (isURLSearchParams(params)) {
+		serializedParams = params.toString();
+	} else {
+		const parts: string[] = [];
+		Object.keys(params).forEach((key) => {
+			const val = params[key];
+			if (val === null || typeof val === "undefined") {
+				return;
 			}
-			parts.push(`${encode(key)}=${encode(value)}`);
-		});
-	});
+			let values = [];
+			if (Array.isArray(val)) {
+				values = val;
+				key += "[]";
+			} else {
+				values = [val];
+			}
 
-	let serializedParams = parts.join("&");
+			values.forEach((value) => {
+				if (isDate(value)) {
+					value = value.toISOString();
+				} else if (isPlainObject(value)) {
+					value = JSON.stringify(value);
+				}
+				parts.push(`${encode(key)}=${encode(value)}`);
+			});
+		});
+
+		serializedParams = parts.join("&");
+	}
 
 	if (serializedParams) {
 		const markIndex = url.indexOf("#");

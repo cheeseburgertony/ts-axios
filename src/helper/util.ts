@@ -12,6 +12,14 @@ export const isPlainObject = (val: any): val is object => {
 	return toString.call(val) === "[object Object]";
 };
 
+export const isFormData = (val: any): boolean => {
+	return typeof val !== "undefined" && val instanceof FormData;
+};
+
+export const isURLSearchParams = (val: any): val is URLSearchParams => {
+	return typeof val !== "undefined" && val instanceof URLSearchParams;
+};
+
 export function extend<T, U>(to: T, from: U): T & U {
 	for (const key in from) {
 		(to as T & U)[key] = from[key] as any;
@@ -56,8 +64,4 @@ export const deepMerge = (...objs: any[]): any => {
 	});
 
 	return result;
-};
-
-export const isFormData = (val: any): boolean => {
-	return typeof val !== "undefined" && val instanceof FormData;
 };

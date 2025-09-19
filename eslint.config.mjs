@@ -45,9 +45,6 @@ export default [
 		files: ["**/*.{ts,tsx}"],
 		languageOptions: {
 			parser: tsParser,
-			parserOptions: {
-				project: "./tsconfig.json"
-			},
 			globals: { ...globals.browser, ...globals.node }
 		},
 		plugins: {
@@ -58,6 +55,30 @@ export default [
 			...tsPlugin.configs.recommended.rules,
 			"@typescript-eslint/no-unnecessary-try-catch": "off",
 			"@typescript-eslint/no-explicit-any": "off",
+			"no-unused-expressions": "off",
+			"no-undef": "off",
+			"no-constant-condition": "off",
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/prefer-ts-expect-error": "off"
+		}
+	},
+	// TypeScript 测试文件配置
+	{
+		files: ["__tests__/**/*.{ts,tsx}"],
+		languageOptions: {
+			parser: tsParser,
+			globals: { ...globals.browser, ...globals.node, ...globals.jest }
+		},
+		plugins: {
+			"@typescript-eslint": tsPlugin
+		},
+		rules: {
+			...pluginJs.configs.recommended.rules,
+			...tsPlugin.configs.recommended.rules,
+			"@typescript-eslint/no-unnecessary-try-catch": "off",
+			"@typescript-eslint/no-explicit-any": "off",
+			"@typescript-eslint/no-require-imports": "off",
+			"@typescript-eslint/ban-ts-comment": "off",
 			"no-unused-expressions": "off",
 			"no-undef": "off",
 			"no-constant-condition": "off",

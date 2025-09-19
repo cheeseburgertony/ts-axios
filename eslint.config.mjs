@@ -7,10 +7,16 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 export default [
 	// Node.js JavaScript 文件配置（examples、配置文件等）
 	{
-		files: ["examples/**/*.js", "*.config.js", "webpack.config.js"],
+		files: [
+			"examples/**/*.js",
+			"*.config.js",
+			"webpack.config.js",
+			"rollup.config.js"
+		],
 		languageOptions: {
 			globals: { ...globals.node },
-			sourceType: "commonjs" // 允许 CommonJS
+			sourceType: "module",
+			ecmaVersion: 2020
 		},
 		rules: {
 			...pluginJs.configs.recommended.rules,

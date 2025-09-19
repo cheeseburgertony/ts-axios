@@ -152,6 +152,19 @@ const registerConfigRouter = () => {
 	});
 };
 
+const registerCancelRouter = () => {
+	router.get("/cancel/get", (req, res) => {
+		setTimeout(() => {
+			res.json("hello");
+		}, 1000);
+	});
+	router.post("/cancel/post", (req, res) => {
+		setTimeout(() => {
+			res.json(req.body);
+		}, 1000);
+	});
+};
+
 /**
  * 注册路由
  */
@@ -161,6 +174,7 @@ registerErrorRouter();
 registerExtendRouter();
 registerInterceptorRouter();
 registerConfigRouter();
+registerCancelRouter();
 
 app.use(router);
 

@@ -2,7 +2,10 @@ const express = require("express");
 const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
+const cookieParser = require("cookie-parser");
 const WebpackConfig = require("./webpack.config");
+
+require("./server2");
 
 const app = express();
 const compiler = webpack(WebpackConfig);
@@ -45,6 +48,7 @@ app.use(express.static(__dirname));
  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 /**
  * 定义路由
@@ -165,6 +169,12 @@ const registerCancelRouter = () => {
 	});
 };
 
+const registerMoreRouter = () => {
+	router.get("/more/get", (req, res) => {
+		res.json(req.cookies);
+	});
+};
+
 /**
  * 注册路由
  */
@@ -175,6 +185,7 @@ registerExtendRouter();
 registerInterceptorRouter();
 registerConfigRouter();
 registerCancelRouter();
+registerMoreRouter();
 
 app.use(router);
 

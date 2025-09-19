@@ -37,7 +37,14 @@ app.use(webpackHotMiddleware(compiler));
  * 提供静态资源服务
  * - 直接访问当前目录下的静态文件（如 HTML）
  */
-app.use(express.static(__dirname));
+// app.use(express.static(__dirname));
+app.use(
+	express.static(__dirname, {
+		setHeaders(res) {
+			res.cookie("XSRF-TOKEN-D", "1234abc");
+		}
+	})
+);
 
 /**
  * 解析请求体

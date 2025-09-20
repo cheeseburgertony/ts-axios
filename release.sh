@@ -10,8 +10,8 @@ then
 
   # commit
   git add -A
-  git commit -m "build: $VERSION"
-  npm version $VERSION --messgae "[release] $VERSION"
+  git commit -m "build: release $VERSION"
+  npm version $VERSION --message "chore(release): $VERSION"
   # git push origin master
 
   #publish

@@ -1,169 +1,419 @@
-# TypeScript library starter
+# ts-axios
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Greenkeeper badge](https://badges.greenkeeper.io/alexjoverm/typescript-library-starter.svg)](https://greenkeeper.io/)
-[![Travis](https://img.shields.io/travis/alexjoverm/typescript-library-starter.svg)](https://travis-ci.org/alexjoverm/typescript-library-starter)
-[![Coveralls](https://img.shields.io/coveralls/alexjoverm/typescript-library-starter.svg)](https://coveralls.io/github/alexjoverm/typescript-library-starter)
-[![Dev Dependencies](https://david-dm.org/alexjoverm/typescript-library-starter/dev-status.svg)](https://david-dm.org/alexjoverm/typescript-library-starter?type=dev)
-[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/AJoverMorales)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![TypeScript](https://img.shields.io/badge/typescript-5.2-blue.svg)](https://www.typescriptlang.org/)
+[![Jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest)
 
-A starter project that makes creating a TypeScript library extremely easy.
+一个基于 TypeScript 重新实现的 Axios HTTP 客户端库，提供完整的类型支持和现代化的开发体验。
 
-![](https://i.imgur.com/opUmHp0.png)
+## 特性
 
-### Usage
+- 🚀 **完整 TypeScript 支持** - 提供完整的类型定义和智能提示
+- 📦 **多种打包格式** - 支持 UMD 和 ES Module 两种格式
+- 🧪 **完整测试覆盖** - 使用 Jest 进行单元测试，覆盖率 > 90%
+- 📚 **自动化文档** - 使用 TypeDoc 生成完整的 API 文档
+- 🔧 **现代化工具链** - ESLint、Prettier、Husky、Commitlint 等
+- 🎯 **请求/响应拦截器** - 灵活的请求和响应处理机制
+- ❌ **请求取消** - 支持取消正在进行的 HTTP 请求
+- 🍪 **Cookie 支持** - 自动处理浏览器 Cookie
+- 🔐 **XSRF 防护** - 内置 CSRF 攻击保护
+- 📈 **上传进度** - 支持文件上传和下载进度监控
+- 🌐 **完整的 HTTP 方法** - 支持 GET、POST、PUT、DELETE、PATCH 等
+- ⚙️ **灵活配置** - 支持全局和实例级别的配置
+- 🔄 **请求/响应转换** - 内置数据转换器，支持 JSON、FormData 等
+
+## 安装
 
 ```bash
-git clone https://github.com/alexjoverm/typescript-library-starter.git YOURFOLDERNAME
-cd YOURFOLDERNAME
+npm install tony-axios
+```
 
-# Run npm install and write your library name when asked. That's all!
+## 快速开始
+
+### 基本用法
+
+```typescript
+import axios from "tony-axios";
+
+// 发送 GET 请求
+axios.get("/api/users").then((response) => {
+	console.log(response.data);
+});
+
+// 发送 POST 请求
+axios
+	.post("/api/users", {
+		name: "John Doe",
+		email: "john@example.com"
+	})
+	.then((response) => {
+		console.log("User created:", response.data);
+	});
+
+// 使用 async/await
+async function getUsers() {
+	try {
+		const response = await axios.get("/api/users");
+		return response.data;
+	} catch (error) {
+		console.error("Failed to get users:", error);
+	}
+}
+```
+
+### 创建实例
+
+```typescript
+const api = axios.create({
+	baseURL: "https://api.example.com",
+	timeout: 5000,
+	headers: {
+		Authorization: "Bearer your-token-here",
+		"Content-Type": "application/json"
+	}
+});
+
+// 使用实例发送请求
+api.get("/users").then((response) => {
+	console.log(response.data);
+});
+```
+
+### 请求和响应拦截器
+
+```typescript
+// 添加请求拦截器
+axios.interceptors.request.use(
+	(config) => {
+		// 在发送请求之前做些什么
+		console.log("Sending request:", config);
+		config.headers.Authorization = `Bearer ${getAuthToken()}`;
+		return config;
+	},
+	(error) => {
+		// 对请求错误做些什么
+		return Promise.reject(error);
+	}
+);
+
+// 添加响应拦截器
+axios.interceptors.response.use(
+	(response) => {
+		// 对响应数据做点什么
+		console.log("Response received:", response);
+		return response;
+	},
+	(error) => {
+		// 对响应错误做点什么
+		if (error.response?.status === 401) {
+			// 处理未授权错误
+			redirectToLogin();
+		}
+		return Promise.reject(error);
+	}
+);
+```
+
+### 取消请求
+
+```typescript
+import { CancelToken } from "tony-axios";
+
+const source = CancelToken.source();
+
+axios
+	.get("/api/data", {
+		cancelToken: source.token
+	})
+	.catch((thrown) => {
+		if (axios.isCancel(thrown)) {
+			console.log("Request canceled:", thrown.message);
+		} else {
+			console.error("Request failed:", thrown);
+		}
+	});
+
+// 取消请求（可以提供一个可选的消息）
+source.cancel("Operation canceled by the user.");
+```
+
+### 文件上传
+
+```typescript
+// 使用 FormData 上传文件
+const formData = new FormData();
+formData.append("file", fileInput.files[0]);
+formData.append("name", "my-file");
+
+axios.post("/api/upload", formData, {
+	headers: {
+		"Content-Type": "multipart/form-data"
+	},
+	onUploadProgress: (progressEvent) => {
+		const percentCompleted = Math.round(
+			(progressEvent.loaded * 100) / progressEvent.total
+		);
+		console.log(`Upload Progress: ${percentCompleted}%`);
+	}
+});
+```
+
+### 配置选项
+
+```typescript
+// 全局默认配置
+axios.defaults.baseURL = "https://api.example.com";
+axios.defaults.headers.common["Authorization"] = "Bearer token";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.timeout = 10000;
+
+// 完整的请求配置选项
+const config = {
+	// 基础 URL，会自动加在 `url` 前面，除非 `url` 是绝对路径
+	baseURL: "https://api.example.com",
+
+	// 请求的 URL
+	url: "/users",
+
+	// 请求方法
+	method: "get", // 默认值
+
+	// 请求头
+	headers: {
+		"Content-Type": "application/json"
+	},
+
+	// URL 参数
+	params: {
+		page: 1,
+		limit: 10
+	},
+
+	// 请求体数据
+	data: {
+		name: "John",
+		email: "john@example.com"
+	},
+
+	// 超时时间（毫秒）
+	timeout: 5000,
+
+	// 跨域请求时是否携带凭证
+	withCredentials: false,
+
+	// 响应数据类型
+	responseType: "json", // 可选: 'json', 'text', 'blob', 'arraybuffer'
+
+	// XSRF 设置
+	xsrfCookieName: "XSRF-TOKEN",
+	xsrfHeaderName: "X-XSRF-TOKEN",
+
+	// 上传进度回调
+	onUploadProgress: (progressEvent) => {
+		console.log("Upload progress:", progressEvent);
+	},
+
+	// 下载进度回调
+	onDownloadProgress: (progressEvent) => {
+		console.log("Download progress:", progressEvent);
+	},
+
+	// 取消令牌
+	cancelToken: source.token
+};
+
+axios(config).then((response) => {
+	console.log(response.data);
+});
+```
+
+### 错误处理
+
+```typescript
+axios.get("/api/users").catch((error) => {
+	if (error.response) {
+		// 服务器响应了状态码，但状态码不在 2xx 范围内
+		console.log("Response data:", error.response.data);
+		console.log("Response status:", error.response.status);
+		console.log("Response headers:", error.response.headers);
+
+		if (error.response.status === 404) {
+			console.log("Resource not found");
+		} else if (error.response.status === 500) {
+			console.log("Server error");
+		}
+	} else if (error.request) {
+		// 请求已发出，但没有收到响应
+		console.log("No response received:", error.request);
+	} else {
+		// 其他错误（请求配置错误等）
+		console.log("Error:", error.message);
+	}
+});
+```
+
+### HTTP 方法别名
+
+```typescript
+// 支持所有常用的 HTTP 方法
+axios.get(url[, config])
+axios.delete(url[, config])
+axios.head(url[, config])
+axios.options(url[, config])
+axios.post(url[, data[, config]])
+axios.put(url[, data[, config]])
+axios.patch(url[, data[, config]])
+```
+
+## 开发
+
+### 环境要求
+
+- Node.js >= 6.0.0
+- npm 或 yarn
+
+### 安装依赖
+
+```bash
 npm install
 ```
 
-**Start coding!** `package.json` and entry files are already set up for you, so don't worry about linking to your main file, typings, etc. Just keep those files with the same name.
-
-### Features
-
- - Zero-setup. After running `npm install` things will setup for you :wink:
- - **[RollupJS](https://rollupjs.org/)** for multiple optimized bundles following the [standard convention](http://2ality.com/2017/04/setting-up-multi-platform-packages.html) and [Tree-shaking](https://alexjoverm.github.io/2017/03/06/Tree-shaking-with-Webpack-2-TypeScript-and-Babel/)
- - Tests, coverage and interactive watch mode using **[Jest](http://facebook.github.io/jest/)**
- - **[Prettier](https://github.com/prettier/prettier)** and **[TSLint](https://palantir.github.io/tslint/)** for code formatting and consistency
- - **Docs automatic generation and deployment** to `gh-pages`, using **[TypeDoc](http://typedoc.org/)**
- - Automatic types `(*.d.ts)` file generation
- - **[Travis](https://travis-ci.org)** integration and **[Coveralls](https://coveralls.io/)** report
- - (Optional) **Automatic releases and changelog**, using [Semantic release](https://github.com/semantic-release/semantic-release), [Commitizen](https://github.com/commitizen/cz-cli), [Conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and [Husky](https://github.com/typicode/husky) (for the git hooks)
-
-### Importing library
-
-You can import the generated bundle to use the whole library generated by this starter:
-
-```javascript
-import myLib from 'mylib'
-```
-
-Additionally, you can import the transpiled modules from `dist/lib` in case you have a modular library:
-
-```javascript
-import something from 'mylib/dist/lib/something'
-```
-
-### NPM scripts
-
- - `npm t`: Run test suite
- - `npm start`: Run `npm run build` in watch mode
- - `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
- - `npm run test:prod`: Run linting and generate coverage
- - `npm run build`: Generate bundles and typings, create docs
- - `npm run lint`: Lints code
- - `npm run commit`: Commit using conventional commit style ([husky](https://github.com/typicode/husky) will tell you to use it if you haven't :wink:)
-
-### Excluding peerDependencies
-
-On library development, one might want to set some peer dependencies, and thus remove those from the final bundle. You can see in [Rollup docs](https://rollupjs.org/#peer-dependencies) how to do that.
-
-Good news: the setup is here for you, you must only include the dependency name in `external` property within `rollup.config.js`. For example, if you want to exclude `lodash`, just write there `external: ['lodash']`.
-
-### Automatic releases
-
-_**Prerequisites**: you need to create/login accounts and add your project to:_
- - [npm](https://www.npmjs.com/)
- - [Travis CI](https://travis-ci.org)
- - [Coveralls](https://coveralls.io)
-
-_**Prerequisite for Windows**: Semantic-release uses
-**[node-gyp](https://github.com/nodejs/node-gyp)** so you will need to
-install
-[Microsoft's windows-build-tools](https://github.com/felixrieseberg/windows-build-tools)
-using this command:_
+### 开发模式
 
 ```bash
-npm install --global --production windows-build-tools
+npm run dev
 ```
 
-#### Setup steps
+启动开发服务器，在浏览器中打开 `http://localhost:8080` 查看示例。
 
-Follow the console instructions to install semantic release and run it (answer NO to "Do you want a `.travis.yml` file with semantic-release setup?").
-
-_Note: make sure you've setup `repository.url` in your `package.json` file_
+### 运行测试
 
 ```bash
-npm install -g semantic-release-cli
-semantic-release-cli setup
-# IMPORTANT!! Answer NO to "Do you want a `.travis.yml` file with semantic-release setup?" question. It is already prepared for you :P
+# 运行所有测试
+npm test
+
+# 监听模式运行测试
+npm run test:watch
+
+# 运行测试并生成覆盖率报告
+npm run test:prod
 ```
 
-From now on, you'll need to use `npm run commit`, which is a convenient way to create conventional commits.
+### 构建
 
-Automatic releases are possible thanks to [semantic release](https://github.com/semantic-release/semantic-release), which publishes your code automatically on [github](https://github.com/) and [npm](https://www.npmjs.com/), plus generates automatically a changelog. This setup is highly influenced by [Kent C. Dodds course on egghead.io](https://egghead.io/courses/how-to-write-an-open-source-javascript-library)
-
-### Git Hooks
-
-There is already set a `precommit` hook for formatting your code with Prettier :nail_care:
-
-By default, there are two disabled git hooks. They're set up when you run the `npm run semantic-release-prepare` script. They make sure:
- - You follow a [conventional commit message](https://github.com/conventional-changelog/conventional-changelog)
- - Your build is not going to fail in [Travis](https://travis-ci.org) (or your CI server), since it's runned locally before `git push`
-
-This makes more sense in combination with [automatic releases](#automatic-releases)
-
-### FAQ
-
-#### `Array.prototype.from`, `Promise`, `Map`... is undefined?
-
-TypeScript or Babel only provides down-emits on syntactical features (`class`, `let`, `async/await`...), but not on functional features (`Array.prototype.find`, `Set`, `Promise`...), . For that, you need Polyfills, such as [`core-js`](https://github.com/zloirock/core-js) or [`babel-polyfill`](https://babeljs.io/docs/usage/polyfill/) (which extends `core-js`).
-
-For a library, `core-js` plays very nicely, since you can import just the polyfills you need:
-
-```javascript
-import "core-js/fn/array/find"
-import "core-js/fn/string/includes"
-import "core-js/fn/promise"
-...
+```bash
+npm run build
 ```
 
-#### What is `npm install` doing on first run?
+构建后的文件会生成在 `dist` 目录中：
 
-It runs the script `tools/init` which sets up everything for you. In short, it:
- - Configures RollupJS for the build, which creates the bundles
- - Configures `package.json` (typings file, main file, etc)
- - Renames main src and test files
+- `dist/axios.umd.js` - UMD 格式，可直接在浏览器中使用
+- `dist/axios.es5.js` - ES Module 格式
+- `dist/types/` - TypeScript 类型定义文件
 
-#### What if I don't want git-hooks, automatic releases or semantic-release?
+### 代码检查和格式化
 
-Then you may want to:
- - Remove `commitmsg`, `postinstall` scripts from `package.json`. That will not use those git hooks to make sure you make a conventional commit
- - Remove `npm run semantic-release` from `.travis.yml`
+```bash
+# 运行 ESLint 检查并自动修复
+npm run lint
 
-#### What if I don't want to use coveralls or report my coverage?
+# 格式化代码（通过 Prettier）
+npm run prettier
+```
 
-Remove `npm run report-coverage` from `.travis.yml`
+### 提交代码
 
-## Resources
+项目使用 [Conventional Commits](https://conventionalcommits.org/) 规范和 Husky 进行 Git 钩子管理：
 
-- [Write a library using TypeScript library starter](https://dev.to/alexjoverm/write-a-library-using-typescript-library-starter) by [@alexjoverm](https://github.com/alexjoverm/)
-- [📺 Create a TypeScript Library using typescript-library-starter](https://egghead.io/lessons/typescript-create-a-typescript-library-using-typescript-library-starter) by [@alexjoverm](https://github.com/alexjoverm/)
-- [Introducing TypeScript Library Starter Lite](https://blog.tonysneed.com/2017/09/15/introducing-typescript-library-starter-lite/) by [@tonysneed](https://github.com/tonysneed)
+```bash
+# 使用交互式提交
+npm run commit
 
-## Projects using `typescript-library-starter`
+# 或手动提交（需要遵循规范）
+git commit -m "feat: add new feature"
+```
 
-Here are some projects that use `typescript-library-starter`:
+### 发布新版本
 
-- [NOEL - A universal, human-centric, replayable event emitter](https://github.com/lifenautjoe/noel)
-- [droppable - A library to give file dropping super-powers to any HTML element.](https://github.com/lifenautjoe/droppable)
-- [redis-messaging-manager - Pubsub messaging library, using redis and rxjs](https://github.com/tomyitav/redis-messaging-manager)
+```bash
+npm run pub
+```
 
-## Credits
+此命令会：
 
-Made with :heart: by [@alexjoverm](https://twitter.com/alexjoverm) and all these wonderful contributors ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+1. 运行测试
+2. 构建项目
+3. 更新版本号
+4. 创建 Git 标签
+5. 发布到 npm
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars.githubusercontent.com/u/6052309?v=3" width="100px;"/><br /><sub><b>Ciro</b></sub>](https://www.linkedin.com/in/ciro-ivan-agulló-guarinos-42109376)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=k1r0s "Code") [🔧](#tool-k1r0s "Tools") | [<img src="https://avatars.githubusercontent.com/u/947523?v=3" width="100px;"/><br /><sub><b>Marius Schulz</b></sub>](https://blog.mariusschulz.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=mariusschulz "Documentation") | [<img src="https://avatars.githubusercontent.com/u/4152819?v=3" width="100px;"/><br /><sub><b>Alexander Odell</b></sub>](https://github.com/alextrastero)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=alextrastero "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/8728882?v=3" width="100px;"/><br /><sub><b>Ryan Ham</b></sub>](https://github.com/superamadeus)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=superamadeus "Code") | [<img src="https://avatars1.githubusercontent.com/u/8458838?v=3" width="100px;"/><br /><sub><b>Chi</b></sub>](https://consiiii.me)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=ChinW "Code") [🔧](#tool-ChinW "Tools") [📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=ChinW "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/2856501?v=3" width="100px;"/><br /><sub><b>Matt Mazzola</b></sub>](https://github.com/mattmazzola)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=mattmazzola "Code") [🔧](#tool-mattmazzola "Tools") | [<img src="https://avatars0.githubusercontent.com/u/2664047?v=3" width="100px;"/><br /><sub><b>Sergii Lischuk</b></sub>](http://leefrost.github.io)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=Leefrost "Code") |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/618922?v=3" width="100px;"/><br /><sub><b>Steve Lee</b></sub>](http;//opendirective.com)<br />[🔧](#tool-SteveALee "Tools") | [<img src="https://avatars0.githubusercontent.com/u/5127501?v=3" width="100px;"/><br /><sub><b>Flavio Corpa</b></sub>](http://flaviocorpa.com)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=kutyel "Code") | [<img src="https://avatars2.githubusercontent.com/u/22561997?v=3" width="100px;"/><br /><sub><b>Dom</b></sub>](https://github.com/foreggs)<br />[🔧](#tool-foreggs "Tools") | [<img src="https://avatars1.githubusercontent.com/u/755?v=4" width="100px;"/><br /><sub><b>Alex Coles</b></sub>](http://alexbcoles.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=myabc "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/1093738?v=4" width="100px;"/><br /><sub><b>David Khourshid</b></sub>](https://github.com/davidkpiano)<br />[🔧](#tool-davidkpiano "Tools") | [<img src="https://avatars0.githubusercontent.com/u/7225802?v=4" width="100px;"/><br /><sub><b>Aarón García Hervás</b></sub>](https://aarongarciah.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=aarongarciah "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/13683986?v=4" width="100px;"/><br /><sub><b>Jonathan Hart</b></sub>](https://www.stuajnht.co.uk)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=stuajnht "Code") |
-| [<img src="https://avatars0.githubusercontent.com/u/13509204?v=4" width="100px;"/><br /><sub><b>Sanjiv Lobo</b></sub>](https://github.com/Xndr7)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=Xndr7 "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/7473800?v=4" width="100px;"/><br /><sub><b>Stefan Aleksovski</b></sub>](https://github.com/sAleksovski)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=sAleksovski "Code") | [<img src="https://avatars2.githubusercontent.com/u/8853426?v=4" width="100px;"/><br /><sub><b>dev.peerapong</b></sub>](https://github.com/devpeerapong)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=devpeerapong "Code") | [<img src="https://avatars0.githubusercontent.com/u/22260722?v=4" width="100px;"/><br /><sub><b>Aaron Groome</b></sub>](http://twitter.com/Racing5372)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=Racing5372 "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/180963?v=4" width="100px;"/><br /><sub><b>Aaron Reisman</b></sub>](https://github.com/lifeiscontent)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=lifeiscontent "Code") | [<img src="https://avatars1.githubusercontent.com/u/32557482?v=4" width="100px;"/><br /><sub><b>kid-sk</b></sub>](https://github.com/kid-sk)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=kid-sk "Documentation") | [<img src="https://avatars0.githubusercontent.com/u/1503089?v=4" width="100px;"/><br /><sub><b>Andrea Gottardi</b></sub>](http://about.me/andreagot)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=AndreaGot "Documentation") |
-| [<img src="https://avatars3.githubusercontent.com/u/1375860?v=4" width="100px;"/><br /><sub><b>Yogendra Sharma</b></sub>](http://TechiesEyes.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=Yogendra0Sharma "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/7407177?v=4" width="100px;"/><br /><sub><b>Rayan Salhab</b></sub>](http://linkedin.com/in/rayan-salhab/)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=cyphercodes "Code") |
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+## 项目结构
 
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind are welcome!
+```
+ts-axios/
+├── src/                    # 源代码
+│   ├── core/              # 核心功能
+│   │   ├── Axios.ts       # Axios 类
+│   │   ├── dispatchRequest.ts
+│   │   ├── InterceptorManager.ts
+│   │   ├── mergeConfig.ts
+│   │   ├── transform.ts
+│   │   └── xhr.ts
+│   ├── cancel/            # 请求取消功能
+│   │   ├── Cancel.ts
+│   │   └── CancelToken.ts
+│   ├── helper/            # 工具函数
+│   │   ├── cookie.ts
+│   │   ├── data.ts
+│   │   ├── error.ts
+│   │   ├── headers.ts
+│   │   ├── url.ts
+│   │   └── util.ts
+│   ├── types/             # 类型定义
+│   │   └── index.ts
+│   ├── axios.ts           # 主入口
+│   ├── defaults.ts        # 默认配置
+│   └── index.ts
+├── __tests__/             # 测试文件
+├── examples/              # 示例代码
+├── dist/                  # 构建输出
+├── docs/                  # API 文档
+└── tools/                 # 构建工具
+```
+
+## 与原版 Axios 的区别
+
+本项目是基于 TypeScript 从零重新实现的 Axios，主要特点：
+
+1. **完全的 TypeScript 支持** - 从设计之初就考虑了类型安全
+2. **现代化的构建工具链** - 使用 Rollup、Jest、ESLint 等现代工具
+3. **更好的代码组织** - 模块化的代码结构，易于维护和扩展
+4. **完整的测试覆盖** - 高质量的单元测试，确保代码可靠性
+
+## 浏览器支持
+
+- Chrome >= 49
+- Firefox >= 52
+- Safari >= 10
+- Edge >= 14
+- IE >= 11（需要 polyfill）
+
+## 许可证
+
+[MIT License](LICENSE) © 2025 cheeseburgertony
+
+## 贡献
+
+欢迎贡献代码！请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详细信息。
+
+## 更新日志
+
+查看 [Releases](https://github.com/cheeseburgertony/ts-axios/releases) 获取版本更新信息。
+
+## 相关链接
+
+- [原版 Axios](https://github.com/axios/axios)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Jest 测试框架](https://jestjs.io/)
+- [Conventional Commits](https://conventionalcommits.org/)

@@ -12,7 +12,7 @@
   "author": "cheeseburgertony <1821955020@qq.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/cheeseburgertony/ts-axios"
   },
   "license": "MIT",
   "engines": {

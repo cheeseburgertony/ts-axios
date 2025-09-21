@@ -1,5 +1,5 @@
-import axios, { AxiosResponse, AxiosTransformer } from "../src/index";
-import { getAjaxRequest } from "./setup/helper";
+import axios, { AxiosResponse, AxiosTransformer } from "../../src/index";
+import { getAjaxRequest } from "../setup/helper";
 
 describe("数据转换测试", () => {
 	beforeEach(() => {

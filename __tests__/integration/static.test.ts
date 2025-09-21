@@ -1,4 +1,4 @@
-import axios from "../src/index";
+import axios from "../../src/index";
 
 describe("静态方法测试", () => {
 	test("应该支持 all 方法", (done) => {

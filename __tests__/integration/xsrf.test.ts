@@ -1,5 +1,5 @@
-import axios from "../src/index";
-import { getAjaxRequest } from "./setup/helper";
+import axios from "../../src/index";
+import { getAjaxRequest } from "../setup/helper";
 
 describe("XSRF 防护测试", () => {
 	beforeEach(() => {

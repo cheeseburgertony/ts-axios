@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "../src/index";
-import { getAjaxRequest } from "./setup/helper";
+import axios, { AxiosRequestConfig, AxiosResponse } from "../../src/index";
+import { getAjaxRequest } from "../setup/helper";
 
 describe("实例测试", () => {
 	beforeEach(() => {

@@ -1,6 +1,6 @@
-import axios, { AxiosTransformer } from "../src/index";
-import { getAjaxRequest } from "./setup/helper";
-import { deepMerge } from "../src/helper/util";
+import axios, { AxiosTransformer } from "../../src/index";
+import { getAjaxRequest } from "../setup/helper";
+import { deepMerge } from "../../src/helper/util";
 
 describe("默认配置测试", () => {
 	beforeEach(() => {

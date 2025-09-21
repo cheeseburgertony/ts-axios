@@ -1,5 +1,5 @@
-import axios from "../src/index";
-import { getAjaxRequest } from "./setup/helper";
+import axios from "../../src/index";
+import { getAjaxRequest } from "../setup/helper";
 
 describe("身份验证测试", () => {
 	beforeEach(() => {

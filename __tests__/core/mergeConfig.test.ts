@@ -1,5 +1,5 @@
-import axios from "../src/index";
-import mergeConfig from "../src/core/mergeConfig";
+import axios from "../../src/index";
+import mergeConfig from "../../src/core/mergeConfig";
 
 describe("配置合并测试", () => {
 	const defaults = axios.defaults;

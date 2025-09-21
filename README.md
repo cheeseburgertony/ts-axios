@@ -405,7 +405,7 @@ ts-axios/
 
 ## 贡献
 
-欢迎贡献代码！请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详细信息。
+欢迎贡献代码！
 
 ## 更新日志
 

@@ -1,5 +1,5 @@
 import axios from "../src/index";
-import { getAjaxRequest } from "./helper";
+import { getAjaxRequest } from "./setup/helper";
 
 describe("进度监听测试", () => {
 	beforeEach(() => {

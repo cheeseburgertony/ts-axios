@@ -1,5 +1,5 @@
 import axios from "../src/index";
-import { getAjaxRequest } from "./helper";
+import { getAjaxRequest } from "./setup/helper";
 
 function testHeaderValue(headers: any, key: string, val?: string): void {
 	let found = false;

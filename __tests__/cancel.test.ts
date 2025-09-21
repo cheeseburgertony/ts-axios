@@ -1,5 +1,5 @@
 import axios from "../src/index";
-import { getAjaxRequest } from "./helper";
+import { getAjaxRequest } from "./setup/helper";
 
 describe("取消功能测试", () => {
 	const CancelToken = axios.CancelToken;

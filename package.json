@@ -57,8 +57,7 @@
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/__tests__/setup/boot.ts",
-      "/__tests__/setup/helper.ts"
+      "/__tests__/setup/"
     ],
     "moduleFileExtensions": [
       "ts",
@@ -67,7 +66,7 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/test/"
+      "/__tests__/setup/"
     ],
     "coverageThreshold": {
       "global": {

@@ -57,8 +57,8 @@
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/__tests__/boot.ts",
-      "/__tests__/helper.ts"
+      "/__tests__/setup/boot.ts",
+      "/__tests__/setup/helper.ts"
     ],
     "moduleFileExtensions": [
       "ts",
@@ -82,7 +82,7 @@
       "src/**/*.{js,ts}"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/__tests__/boot.ts"
+      "<rootDir>/__tests__/setup/boot.ts"
     ]
   },
   "devDependencies": {

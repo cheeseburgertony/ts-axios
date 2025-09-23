@@ -327,10 +327,7 @@ npm run prettier
 项目使用 [Conventional Commits](https://conventionalcommits.org/) 规范和 Husky 进行 Git 钩子管理：
 
 ```bash
-# 使用交互式提交
-npm run commit
-
-# 或手动提交（需要遵循规范）
+# 手动提交（需要遵循规范）
 git commit -m "feat: add new feature"
 ```
 

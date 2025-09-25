@@ -375,7 +375,7 @@ ts-axios/
 ├── __tests__/             # 测试文件
 ├── examples/              # 示例代码
 ├── dist/                  # 构建输出
-└──  docs/                  # API 文档
+└── docs/                  # API 文档
 ```
 
 ## 与原版 Axios 的区别

@@ -349,7 +349,7 @@ npm run pub
 
 ```
 ts-axios/
-├── src/                    # 源代码
+├── src/                   # 源代码
 │   ├── core/              # 核心功能
 │   │   ├── Axios.ts       # Axios 类
 │   │   ├── dispatchRequest.ts

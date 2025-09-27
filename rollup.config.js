@@ -1,6 +1,5 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import camelCase from "lodash.camelcase";
 import typescript from "rollup-plugin-typescript2";
 import json from "@rollup/plugin-json";
 import { readFileSync } from "fs";
@@ -9,33 +8,35 @@ const pkg = JSON.parse(readFileSync("./package.json", "utf-8"));
 
 const libraryName = "axios";
 
+const toCamelCase = (str) => {
+	return str.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+};
+
 export default {
 	input: `src/${libraryName}.ts`,
+	// 输出配置
 	output: [
 		{
 			file: pkg.main,
-			name: camelCase(libraryName),
+			name: toCamelCase(libraryName),
 			format: "umd",
 			sourcemap: true
 		},
 		{ file: pkg.module, format: "es", sourcemap: true }
 	],
-	// Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
+	// 排除不需要打包的依赖
 	external: [],
 	watch: {
 		include: "src/**"
 	},
 	plugins: [
-		// Allow json resolution
+		// JSON文件解析
 		json(),
-		// Compile TypeScript files
+		// TypeScript 编译
 		typescript({ useTsconfigDeclarationDir: true }),
-
-		// Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
+		// CommonJS 转换
 		commonjs(),
-		// Allow node_modules resolution, so you can use 'external' to control
-		// which external modules to include in the bundle
-		// https://github.com/rollup/rollup-plugin-node-resolve#usage
+		// Node 模块解析
 		resolve()
 	]
 };
